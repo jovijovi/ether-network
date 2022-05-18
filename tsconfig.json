@@ -17,10 +17,16 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
+  "include": [
+    "./lib/**/*",
+    "./test/**/*",
+  ],
   "exclude": [
+    ".github",
+    "coverage",
     "dist",
+    "doc",
     "node_modules",
-    "publish",
-    "test"
+    "publish"
   ]
 }
