@@ -1,6 +1,6 @@
 # Ether Network
 
-[![npm](https://img.shields.io/npm/v/@jovijovi/ether-network.svg)](https://www.npmjs.com/package/@jovijovi/ether-network)
+[![npm](https://img.shields.io/npm/v/ether-network.svg)](https://www.npmjs.com/package/ether-network)
 [![GitHub Actions](https://github.com/jovijovi/ether-network/workflows/Test/badge.svg)](https://github.com/jovijovi/ether-network)
 [![Coverage](https://img.shields.io/codecov/c/github/jovijovi/ether-network?label=\&logo=codecov\&logoColor=fff)](https://codecov.io/gh/jovijovi/ether-network)
 
@@ -25,19 +25,19 @@ A provider network toolkit for Ethereum ecosystem.
 ## Install
 
 ```shell
-npm install @jovijovi/ether-network
+npm install ether-network
 ```
 
 or
 
 ```shell
-yarn add @jovijovi/ether-network
+yarn add ether-network
 ```
 
 ## Usage
 
 ```typescript
-import {network} from '@jovijovi/ether-network';
+import {network} from 'ether-network';
 
 network.LoadConfig(customConfig);
 network.isConnected().then(r => {
