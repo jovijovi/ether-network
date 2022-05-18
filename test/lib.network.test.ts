@@ -7,20 +7,24 @@ custom:
   # Default network
   defaultNetwork:
     # Chain name
-    chain: dev
+    chain: polygon
     # Network name
-    network: local
+    network: mainnet
     # Use provider pool
     providerPool: true
 
   networks:
-    # Local Development
-    dev:
-      local:
-        chainId: 666
+    # Polygon
+    # Ref: https://docs.polygon.technology/docs/develop/network-details/network
+    polygon:
+      mainnet:
+        chainId: 137
         provider:
-          - http://localhost:8545
-        browser: http://localhost:4000
+          - https://polygon-rpc.com
+          - https://matic-mainnet.chainstacklabs.com
+          - https://rpc-mainnet.maticvigil.com
+          - https://rpc-mainnet.matic.quiknode.pro
+        browser: https://polygonscan.com
 `
 
 class YmlConfig {
