@@ -1,5 +1,5 @@
 {
-  "name": "ether-network",
+  "name": "@jovijovi/ether-network",
   "version": "0.1.0",
   "description": "A provider network toolkit for Ethereum ecosystem",
   "author": "jovijovi <mageyul@hotmail.com>",
