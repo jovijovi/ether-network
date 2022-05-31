@@ -17,7 +17,7 @@ A provider network toolkit for Ethereum ecosystem.
 
 ## Development Environment
 
-- typescript `4.6.4`
+- typescript `4.7.2`
 - node `v16.15.0`
 - ts-node `v10.8.0`
 - yarn `v1.22.18`
