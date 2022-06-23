@@ -8,55 +8,51 @@ export namespace MyProvider {
 	let defaultProvider: JsonRpcProvider;
 
 	// Provider Pool
-	const providerPool: JsonRpcProvider[] = [];
+	let providerPool: JsonRpcProvider[] = [];
 
 	// New provider
 	export function New(): JsonRpcProvider {
-		const providerSetting = customConfig.GetProvider();
-		const chainId = customConfig.GetChainId();
-		defaultProvider = new JsonRpcProvider(providerSetting, chainId);
-
-		log.RequestId().info("Network=%s, ChainId=%d, Provider=%s",
-			customConfig.GetDefaultNetwork(), chainId, providerSetting);
-
-		return defaultProvider;
+		return new JsonRpcProvider(customConfig.GetProvider(), customConfig.GetChainId());
 	}
 
 	// Get provider
-	export function Get(): JsonRpcProvider {
-		if (customConfig.GetDefaultNetwork().providerPool) {
-			return GetFromPool();
+	export function Get(isForceNew = false, reqId?: string): JsonRpcProvider {
+		// Returns a new provider always if isForceNew is true
+		if (isForceNew) {
+			return New();
 		}
 
+		// Get provider from pool
+		if (customConfig.GetDefaultNetwork().providerPool) {
+			if (providerPool.length === 0) {
+				providerPool = NewPool();
+				log.RequestId(reqId).info("Init provider pool, Network=%s, ChainId=%d, Provider=%j",
+					customConfig.GetDefaultNetwork(), customConfig.GetChainId(), customConfig.GetAllProviders());
+			}
+
+			const provider = GetFromPool();
+			log.RequestId(reqId).trace("Network=%s, ChainId=%d, Provider=%s",
+				customConfig.GetDefaultNetwork(), provider.network.chainId, provider.connection.url);
+			return provider;
+		}
+
+		// Get default provider
 		if (defaultProvider == null) {
-			return New();
+			defaultProvider = New();
+			log.RequestId(reqId).info("Network=%s, ChainId=%d, Provider=%s",
+				customConfig.GetDefaultNetwork(), defaultProvider.network.chainId, defaultProvider.connection.url);
 		}
 		return defaultProvider;
 	}
 
 	// New provider pool
-	export function NewPool() {
-		const providerSettings = customConfig.GetAllProviders();
-		const chainId = customConfig.GetChainId();
-		for (const setting of providerSettings) {
-			providerPool.push(new JsonRpcProvider(setting, chainId));
-			log.RequestId().info("Init provider pool, Network=%s, ChainId=%d, Provider=%s",
-				customConfig.GetDefaultNetwork(), chainId, setting);
-		}
+	export function NewPool(): JsonRpcProvider[] {
+		return customConfig.GetAllProviders().map(url => new JsonRpcProvider(url, customConfig.GetChainId()));
 	}
 
 	// GetFromPool retrieve a provider from provider pool
 	export function GetFromPool(): JsonRpcProvider {
-		if (providerPool.length === 0) {
-			NewPool();
-		}
-
 		// Get random provider, range: [0, providerPool.length)
-		const index = RandIntBetween(0, providerPool.length);
-
-		log.RequestId().trace("Network=%s, ChainId=%d, Provider=%s",
-			customConfig.GetDefaultNetwork(), providerPool[index].network.chainId, providerPool[index].connection.url);
-
-		return providerPool[index];
+		return providerPool[RandIntBetween(0, providerPool.length)];
 	}
 }
