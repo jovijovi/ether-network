@@ -61,3 +61,19 @@ test('Connection with provider pool disabled', async () => {
 	assert.strictEqual(blockNumber > 0, true);
 	console.debug("BlockNumber=", blockNumber);
 }, 10000)
+
+test('Force new provider', async () => {
+	network.LoadConfig(setting.custom);
+	const result = await network.isConnected();
+	assert.strictEqual(result, true);
+
+	const provider = network.MyProvider.Get(true);
+	const blockNumber = await provider.getBlockNumber();
+	assert.strictEqual(blockNumber > 0, true);
+	console.debug("BlockNumber=", blockNumber);
+}, 10000)
+
+test('Get browser', async () => {
+	const browserURL = network.GetBrowser();
+	assert.notEqual(browserURL, undefined);
+})
