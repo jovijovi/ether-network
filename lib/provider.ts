@@ -55,4 +55,10 @@ export namespace MyProvider {
 		// Get random provider, range: [0, providerPool.length)
 		return providerPool[RandIntBetween(0, providerPool.length)];
 	}
+
+	// Reset (NOT SAFE)
+	export function Reset() {
+		defaultProvider = undefined;
+		providerPool = [];
+	}
 }
