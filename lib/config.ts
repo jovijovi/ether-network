@@ -26,7 +26,11 @@ export function LoadConfig(custom: any) {
 
 // GetDefaultNetwork returns default chain & network name
 export function GetDefaultNetwork(): DefaultNetwork {
-	return customConfig.defaultNetwork;
+	if (customConfig && customConfig.defaultNetwork) {
+		return customConfig.defaultNetwork;
+	}
+
+	throw new Error(`Invalid network config`);
 }
 
 // GetNetwork returns network config
