@@ -41,7 +41,7 @@ export function GetNetworkConfig(defaultNetwork: DefaultNetwork): Network {
 // GetProvider returns 1st provider
 export function GetProvider(): string {
 	const provider = GetNetworkConfig(GetDefaultNetwork()).provider;
-	if (!provider || provider.length == 0 || !provider[0]) {
+	if (!provider || provider.length === 0 || !provider[0]) {
 		throw new Error('GetProvider failed, invalid provider');
 	}
 	return provider[0];
@@ -50,7 +50,7 @@ export function GetProvider(): string {
 // GetAllProviders returns all providers
 export function GetAllProviders(): string[] {
 	const provider = GetNetworkConfig(GetDefaultNetwork()).provider;
-	if (!provider || provider.length == 0) {
+	if (!provider || provider.length === 0) {
 		throw new Error('GetAllProviders failed, invalid provider');
 	}
 	return provider;
