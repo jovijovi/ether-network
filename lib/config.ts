@@ -2,6 +2,7 @@ class Network {
 	chainId: number
 	provider: string[]
 	browser?: string
+	options: any
 }
 
 type Chain = Map<string, Map<string, Network>>;
@@ -69,3 +70,7 @@ export function GetBrowser(): string {
 	return GetNetworkConfig(GetDefaultNetwork()).browser;
 }
 
+// GetOptions returns network options
+export function GetOptions(): any {
+	return GetNetworkConfig(GetDefaultNetwork()).options;
+}
