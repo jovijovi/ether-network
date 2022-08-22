@@ -2,6 +2,7 @@ class Network {
 	chainId: number
 	provider: string[]
 	browser?: string
+	options: any
 }
 
 type Chain = Map<string, Map<string, Network>>;
@@ -25,7 +26,11 @@ export function LoadConfig(custom: any) {
 
 // GetDefaultNetwork returns default chain & network name
 export function GetDefaultNetwork(): DefaultNetwork {
-	return customConfig.defaultNetwork;
+	if (customConfig && customConfig.defaultNetwork) {
+		return customConfig.defaultNetwork;
+	}
+
+	throw new Error(`Invalid network config`);
 }
 
 // GetNetwork returns network config
@@ -40,7 +45,7 @@ export function GetNetworkConfig(defaultNetwork: DefaultNetwork): Network {
 // GetProvider returns 1st provider
 export function GetProvider(): string {
 	const provider = GetNetworkConfig(GetDefaultNetwork()).provider;
-	if (!provider || provider.length == 0 || !provider[0]) {
+	if (!provider || provider.length === 0 || !provider[0]) {
 		throw new Error('GetProvider failed, invalid provider');
 	}
 	return provider[0];
@@ -49,7 +54,7 @@ export function GetProvider(): string {
 // GetAllProviders returns all providers
 export function GetAllProviders(): string[] {
 	const provider = GetNetworkConfig(GetDefaultNetwork()).provider;
-	if (!provider || provider.length == 0) {
+	if (!provider || provider.length === 0) {
 		throw new Error('GetAllProviders failed, invalid provider');
 	}
 	return provider;
@@ -69,3 +74,7 @@ export function GetBrowser(): string {
 	return GetNetworkConfig(GetDefaultNetwork()).browser;
 }
 
+// GetOptions returns network options
+export function GetOptions(): any {
+	return GetNetworkConfig(GetDefaultNetwork()).options;
+}

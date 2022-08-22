@@ -25,17 +25,155 @@ custom:
           - https://rpc-mainnet.maticvigil.com
           - https://rpc-mainnet.matic.quiknode.pro
         browser: https://polygonscan.com
+        options: 'SOME OPTIONS'
 `
+
+const configYamlNetworkNotWorks = `
+custom:
+  # Default network
+  defaultNetwork:
+    # Chain name
+    chain: dev
+    # Network name
+    network: local
+    # Use provider pool
+    providerPool: true
+
+  networks:
+    dev:
+      local:
+        chainId: 1234567890
+        provider:
+          - https://localhost:12345
+        browser: https://localhost:4000/
+`
+
+const configYamlEmptyNetwork = `
+custom:
+  # Default network
+  defaultNetwork:
+    # Chain name
+    chain: ethereum
+    # Network name
+    network: mainnet
+    # Use provider pool
+    providerPool: true
+
+  networks:
+    ethereum:
+      mainnet:
+`
+
+const configYamlInvalidNetworkEmptyProvider = `
+custom:
+  # Default network
+  defaultNetwork:
+    # Chain name
+    chain: ethereum
+    # Network name
+    network: mainnet
+    # Use provider pool
+    providerPool: true
+
+  networks:
+    ethereum:
+      mainnet:
+        chainId: 1
+        browser:
+`
+
+const configYamlInvalidNetworkEmptyChainId = `
+custom:
+  # Default network
+  defaultNetwork:
+    # Chain name
+    chain: ethereum
+    # Network name
+    network: mainnet
+    # Use provider pool
+    providerPool: true
+
+  networks:
+    ethereum:
+      mainnet:
+        chainId:
+        provider:
+          - http://localhost:12345
+        browser:
+`
+
 
 class YmlConfig {
 	custom: any;
 }
 
 let setting: YmlConfig;
+let mockNetworkNotWorks: YmlConfig;
+let mockEmptyNetwork: YmlConfig;
+let mockInvalidNetworkEmptyProvider: YmlConfig;
+let mockInvalidNetworkEmptyChainId: YmlConfig;
 
 beforeAll(async () => {
 	setting = yaml.parse(configYaml);
+	mockNetworkNotWorks = yaml.parse(configYamlNetworkNotWorks);
+	mockEmptyNetwork = yaml.parse(configYamlEmptyNetwork);
+	mockInvalidNetworkEmptyProvider = yaml.parse(configYamlInvalidNetworkEmptyProvider);
+	mockInvalidNetworkEmptyChainId = yaml.parse(configYamlInvalidNetworkEmptyChainId);
 })
+
+test('ERROR: Network not works', async () => {
+	try {
+		const result = await network.isConnected();
+		console.debug("Result=", result);
+	} catch (e) {
+		console.debug("Expected error=", e);
+	}
+	network.MyProvider.Reset();
+}, 10000)
+
+test('ERROR: Empty network', async () => {
+	try {
+		network.LoadConfig(mockEmptyNetwork.custom);
+		const result = await network.isConnected();
+		console.debug("Result=", result);
+	} catch (e) {
+		console.debug("Expected error=", e);
+	}
+	network.MyProvider.Reset();
+}, 10000)
+
+test('ERROR: Invalid network - Empty provider - isConnected failed', async () => {
+	try {
+		network.LoadConfig(mockInvalidNetworkEmptyProvider.custom);
+		const result = await network.isConnected();
+		console.debug("Result=", result);
+	} catch (e) {
+		console.debug("Expected error=", e);
+	}
+	network.MyProvider.Reset();
+}, 10000)
+
+test('ERROR: Invalid network - Empty provider - Get provider failed', async () => {
+	try {
+		network.LoadConfig(mockInvalidNetworkEmptyProvider.custom);
+		const provider = network.MyProvider.Get(true);
+		console.debug("Provider=", provider);
+	} catch (e) {
+		console.debug("Expected error=", e);
+	}
+	network.MyProvider.Reset();
+}, 10000)
+
+test('ERROR: Invalid network - Empty chainId', async () => {
+	try {
+		network.LoadConfig(mockInvalidNetworkEmptyChainId.custom);
+		const result = await network.isConnected();
+		console.debug("Result=", result);
+	} catch (e) {
+		console.debug("Expected error=", e);
+	}
+	network.MyProvider.Reset();
+}, 10000)
 
 test('Connection with provider pool enabled', async () => {
 	network.LoadConfig(setting.custom);
@@ -75,5 +213,12 @@ test('Force new provider', async () => {
 
 test('Get browser', async () => {
 	const browserURL = network.GetBrowser();
+	console.debug("Browser=", browserURL);
 	assert.notEqual(browserURL, undefined);
+})
+
+test('Get network options', async () => {
+	const options = network.GetOptions();
+	console.debug("Options=", options);
+	assert.notEqual(options, undefined);
 })

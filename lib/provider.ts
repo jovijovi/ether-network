@@ -37,7 +37,7 @@ export namespace MyProvider {
 		}
 
 		// Get default provider
-		if (defaultProvider == null) {
+		if (!defaultProvider) {
 			defaultProvider = New();
 			log.RequestId(reqId).info("Network=%s, ChainId=%d, Provider=%s",
 				customConfig.GetDefaultNetwork(), defaultProvider.network.chainId, defaultProvider.connection.url);
@@ -54,5 +54,11 @@ export namespace MyProvider {
 	export function GetFromPool(): JsonRpcProvider {
 		// Get random provider, range: [0, providerPool.length)
 		return providerPool[RandIntBetween(0, providerPool.length)];
+	}
+
+	// Reset (NOT SAFE)
+	export function Reset() {
+		defaultProvider = undefined;
+		providerPool = [];
 	}
 }
