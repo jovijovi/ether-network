@@ -12,13 +12,13 @@ A provider network toolkit for Ethereum ecosystem.
 
 ## Features
 
-- Provider connection test
-- Provider pool
+- Connect to RPC provider
+- Get provider randomly from the `provider pool`
 
 ## Development Environment
 
-- typescript `4.8.3`
-- node `v16.17.0`
+- typescript `4.8.4`
+- node `v16.17.1`
 - ts-node `v10.9.1`
 - yarn `v1.22.19`
 
